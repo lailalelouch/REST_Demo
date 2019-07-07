@@ -16,6 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from hotels import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('hotels/list/', views.HotelsList.as_view(), name="hotels-list"),
+
+    path('bookings/', views.BookingsList.as_view(), name="bookings-list"),
 ]
