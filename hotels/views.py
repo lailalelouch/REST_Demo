@@ -12,8 +12,11 @@ class HotelsList(ListAPIView):
 
 
 class BookingsList(ListAPIView):
-	queryset = Booking.objects.filter(check_in__gte=datetime.today())
 	serializer_class = BookingDetailsSerializer
+
+	def get_queryset(self):
+		today = datetime.today()
+		return Booking.objects.filter(user=self.request.user, check_in__gte=today)
 
 
 class HotelDetails(RetrieveAPIView):
