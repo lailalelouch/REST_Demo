@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework_jwt.views import obtain_jwt_token
 
 from hotels import views
 
@@ -23,8 +24,11 @@ urlpatterns = [
 
     path('hotels/list/', views.HotelsList.as_view(), name="hotels-list"),
     path('hotels/details/<int:hotel_id>/', views.HotelDetails.as_view(), name="hotel-details"),
+    path('hotels/book/<int:hotel_id>/', views.BookHotel.as_view(), name="book-hotel"),
 
     path('bookings/', views.BookingsList.as_view(), name="bookings-list"),
     path('bookings/cancel/<int:booking_id>/', views.CancelBooking.as_view(), name="cancel-booking"),
     path('bookings/modify/<int:booking_id>/', views.ModifyBooking.as_view(), name="modify-booking"),
+
+    path('login/', obtain_jwt_token, name="login"),
 ]
