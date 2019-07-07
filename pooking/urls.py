@@ -31,4 +31,5 @@ urlpatterns = [
     path('bookings/modify/<int:booking_id>/', views.ModifyBooking.as_view(), name="modify-booking"),
 
     path('login/', obtain_jwt_token, name="login"),
+    path('register/',  views.Register.as_view() , name="register"),
 ]

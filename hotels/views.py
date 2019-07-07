@@ -3,7 +3,7 @@ from datetime import datetime
 from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView, DestroyAPIView, CreateAPIView
 
 from .models import Hotel, Booking
-from .serializers import HotelsListSerializer, BookingDetailsSerializer, HotelDetailsSerializer, BookHotelSerializer
+from .serializers import HotelsListSerializer, BookingDetailsSerializer, HotelDetailsSerializer, BookHotelSerializer, UserCreateSerializer
 
 
 class HotelsList(ListAPIView):
@@ -41,3 +41,7 @@ class BookHotel(CreateAPIView):
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user, hotel_id=self.kwargs['hotel_id'])
+
+
+class Register(CreateAPIView):
+    serializer_class = UserCreateSerializer
