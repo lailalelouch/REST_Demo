@@ -1,9 +1,11 @@
 from datetime import datetime
 
 from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView, DestroyAPIView, CreateAPIView
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Hotel, Booking
 from .serializers import HotelsListSerializer, BookingDetailsSerializer, HotelDetailsSerializer, BookHotelSerializer, UserCreateSerializer
+from .permissions import IsBookedByUser, IsNotInPast
 
 
 class HotelsList(ListAPIView):
@@ -13,6 +15,7 @@ class HotelsList(ListAPIView):
 
 class BookingsList(ListAPIView):
 	serializer_class = BookingDetailsSerializer
+	permission_classes = [IsAuthenticated]
 
 	def get_queryset(self):
 		today = datetime.today()
@@ -30,17 +33,20 @@ class ModifyBooking(RetrieveUpdateAPIView):
 	queryset = Booking.objects.all()
 	serializer_class = BookHotelSerializer
 	lookup_field = 'id'
-	lookup_url_kwarg = 'booking_id'	
+	lookup_url_kwarg = 'booking_id'
+	permission_classes = [IsAuthenticated, IsBookedByUser, IsNotInPast]
 
 
 class CancelBooking(DestroyAPIView):
 	queryset = Booking.objects.all()
 	lookup_field = 'id'
 	lookup_url_kwarg = 'booking_id'
+	permission_classes = [IsAuthenticated, IsBookedByUser, IsNotInPast]
 
 
 class BookHotel(CreateAPIView):
 	serializer_class = BookHotelSerializer
+	permission_classes = [IsAuthenticated]
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user, hotel_id=self.kwargs['hotel_id'])
